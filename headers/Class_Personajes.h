@@ -1,5 +1,5 @@
-#ifndef CLASE_PERSONAJES_h
-#define CLASE_PERSONAJES_h
+#ifndef CLASS_PERSONAJES_h
+#define CLASS_PERSONAJES_h
 
 #include <string>
 

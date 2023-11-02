@@ -27,6 +27,7 @@ Variables Globales
 /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
 //Utilidades
 ifstream file;  //Lectura de archivos
+int money;      //Dinero 
 
 //Informacion de recursos del jugador (Personajes, Objetos, Dinero, etc).
 
@@ -216,26 +217,58 @@ void Menu_CrearPersonaje(){
     int per = 1;
     string nombre;
     string clase;
+    bool class_exist = false;
     while(per<3){
         Mostrar_Clases();
         cout << "\nConfigurando personaje " << per << ":\n\nNombre: ";
         cin >> nombre;
-        cout << "\nClase: ";
-        cin >> clase; 
+        while(!class_exist){
+            cout << "\nClase: ";
+            cin >> clase;
+            for(int i=0; i<clases.size(); i++){
+                if(clase == clases[i].NOM){
+                    class_exist = true;
+                    break;
+                }
+            }
+            if(!class_exist) cout << "\nNo existe esa clase, prueba otra vez."; 
+        }
+        class_exist = false;
         per++;
+
+        
         system("clear");
     }
 
 }
-              
 
+void Mostrar_Doc(string ruta){
+    file.open(ruta);
+    string line;
+    if(!file.is_open()){
+        cerr << "Error al abrir documento: " << ruta;
+    }else{
+        while(getline(file,line)){
+            cout << line << endl;
+        }
+    }
+}             
+string Menu_Principal(){
+    cout <<   "+______________________________________________________+"
+         << "\n| personajes | inventario | tienda | comenzar | manual | $ " << money
+         << "\n+======================================================+";
+
+    cout << "\n\n\nMaster ~ $ ";
+    string com;
+    cin >> com;
+    return com;
+} 
 
 
 int main(){
-
-    Menu_CrearPersonaje();
-
-
+    string ruta;
+    cin >> ruta;
+    Mostrar_Doc(ruta);
     return 0;
 }
 

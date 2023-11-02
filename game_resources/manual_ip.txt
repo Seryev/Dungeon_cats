@@ -1,0 +1,57 @@
+Menu In-Play:
+
++______________________________________________________+
+| personajes | inventario | tienda | comenzar | manual | $ Dinero
++======================================================+
+------------------------------------------------------------------------
+personajes: Muestra informacion de los personajes.
+Parametros______________________________________________________________
+1. *Sin parametro*        : Sirve para mostrar la info de los personajes,
+                            muestra todos los personajes.
+2. -> nombre              : Sirve para mostrar info de un personaje.
+3. -> nombre -> get       : Sirve para equipar y desequipar objetos del
+                           invetario.
+4. -> nombre -> set       : Sirve para equipar un movimiento y establecer
+                            un valor de posibilidad de que ocurra. 
+                            (se calcula su probabilidad con el porsentaje
+                            equivalente a su numero en la suma total de
+                            todos los numeros, se recomienda utilizar una
+                            reparticion de 100 entre los ataques seteados)
+w = armas
+a = artefactos
+m = movimientos
+Ejemplos:
+personajes                  :Muestra info de todos los peronsajes
+personajes juan             :Muestra info de juan
+personajes juan get w 1     :Le equipa el arma numero 1 del invetario a juan
+personajes juan get a 1 11  :Le equipa dos artefactos a juan, el 1 y el 11.
+personajes juan set m 1 15  :Se equipa el movimiento 1 con cantidad de 15.
+--------------------------------------------------------------------------
+inventario: Muestra el inventario completo.
+Parametros________________________________________________________________
+1. *Sin parametros* :Sirve para mostrar todo el inventario      
+2. -> vender        :Sirve para vender objetos
+all = todos los artefactos y armas
+w = armas
+a = artefactos
+Ejemplos:
+inventario                  :Ver todo el inventario
+inventario vender all       :Vender todo el inventario
+inventario vender w 1       :Vender el arma 1
+inventario vender a 1 3 5 4 :Vender los artefactos 1,3,5,4
+--------------------------------------------------------------------------
+tienda: Muestra los objetos de la tienda.
+Parametros________________________________________________________________
+1. *Sin parametros* :Sirve para mostrar toda la tienda.
+2. -> comprar       :Sirve para mascar pitos, para que va ser cabron.
+Ejemplos:
+tienda           : Muestra los objetos a la venta de la tienda
+tienda comprar 1 : Si tienes dinero suficiente, compra el objeto. 
+--------------------------------------------------------------------------
+comenzar: Comienza la ronda. 
+--------------------------------------------------------------------------
+manual: Muestra el manual.
+--------------------------------------------------------------------------
+Puedes utilizar "cls" para limpiar la pantalla, y reimprimir el menu.
+Ejemplo:
+cls
