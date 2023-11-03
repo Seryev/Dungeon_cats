@@ -38,6 +38,16 @@ class Personajes {
                     this->PRST[i] = PRST[i];
                 }
             }
+
+        bool isARMempy();//Funcion para comprobar si existe un arma equipada
+        bool isARTempy();//Funcion para comprobar si existen artefactos equipados
+
 };
 
+bool Personajes::isARMempy(){
+    return this->ARM == nullptr;
+}
+bool Personajes::isARTempy(){
+    return this->ART.empty();
+}
 #endif

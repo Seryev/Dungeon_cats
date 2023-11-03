@@ -1,7 +1,7 @@
 /*
 Author: Seryev
 Date: 10/25/2023
-Version 0.5
+Version 0.6
 */
 
 /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -13,6 +13,8 @@ Librerias
 #include <sstream>                      //Buffer de strings
 #include <vector>                       //Estructura de datos
 #include <cmath>                        //Utilidades matematicas
+#include <ctime>                        //Tiempo
+#include <cstdlib>                      //Utilidades
 #include "headers/Armas.h"              //Objetos armas
 #include "headers/Artefactos.h"         //Objetos artefactos
 #include "headers/Class_Personajes.h"   //Clases de los personajes
@@ -28,9 +30,8 @@ Variables Globales
 //Utilidades
 ifstream file;  //Lectura de archivos
 int money;      //Dinero 
-
 //Informacion de recursos del jugador (Personajes, Objetos, Dinero, etc).
-
+vector<Personajes> personajes;
 //Informacion de recursos para calculo de partida (Informacion del nivel donde se encuentra, etc)
 vector<Class_Personajes> clases;
 //Llaves de control de datos
@@ -134,6 +135,110 @@ void Columnas_Clase(int max_size){
     }
     cout << "+"<< endl;
 } 
+
+void Mostrar_Arma(Armas* ARM, int max_size){
+    cout << "| Arma   | ";
+    Ajuste_Nombre(max_size,0);cout << "|" << endl;
+    cout << "| Nombre | " << ARM->NOM;
+    Ajuste_Nombre(max_size,ARM->NOM.size());cout << "|" << endl; 
+    cout << "| Rango  | " << ARM->CLAS;
+    Ajuste_Nombre(max_size,1);cout << "|" << endl;
+    cout << "| Nivel  | " << ARM->NIV;
+    Ajuste_Nombre(max_size,Numero_Dig(ARM->NIV));cout << "|" << endl;
+}
+/*=====================================================
+Funcion para imprimir la informacion de una clase
+=====================================================*/
+void Mostrar_Personaje(Personajes& pers){
+    int max_size = (pers.NOM.size() > 11)? max_size=pers.NOM.size():max_size=11;
+    if(max_size < pers.CLAS.size()) max_size = pers.CLAS.size();
+    string iguales;
+
+    for(int i=max_size+10;i>0;i--){
+        iguales+= "=";
+    }
+    cout << "\n+" << iguales <<"+" << endl; // Separador ~~~~Nombre, clase y nivel
+    cout << "| Nombre | " << pers.NOM;
+    Ajuste_Nombre(max_size,pers.NOM.size());
+    cout << "|\n| Clase  | " << pers.CLAS;
+    Ajuste_Nombre(max_size,pers.CLAS.size());
+    cout << "|\n| Nivel  | " << pers.NIV;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.NIV));
+    cout << "|" << endl;
+    cout << "+" << iguales << "+" << endl;//Separador ~~~~~~STATS
+    cout << "| VID    | " << pers.VID;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.VID));cout << "|" << endl;
+    cout << "| MAN    | " << pers.MAN;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.MAN));cout << "|" << endl;
+    cout << "| FUE    | " << pers.FUE;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.FUE));cout << "|" << endl;
+    cout << "| DEF    | " << pers.DEF;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.DEF));cout << "|" << endl;
+    cout << "| MAG    | " << pers.MAG;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.MAG));cout << "|" << endl;
+    cout << "| RES    | " << pers.RES;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.RES));cout << "|" << endl;
+    cout << "| VEL    | " << pers.VEL;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.VEL));cout << "|" << endl;
+    cout << "| COR    | " << pers.COR;
+    Ajuste_Nombre(max_size,Numero_Dig(pers.COR));cout << "|" << endl;
+    cout << "+" << iguales << "+" << endl;//Separador ~~~~~~~~~~~~ARMA
+    if(pers.isARMempy()){
+        cout << "| Arma   | NONE";
+        Ajuste_Nombre(max_size,4);cout << "|" << endl;
+    }else{
+        Mostrar_Arma(pers.ARM, max_size);
+    }
+    cout << "+" << iguales << "+" << endl;//Separador ~~~~~~~~~~~~Artefactos
+}
+/*=====================================================
+Funcion para calcular un valor aleatorio.
+=====================================================*/
+int valorAleatorio(int min, int max) {
+    
+    return min + rand() % (max - min + 1);
+}
+/*=====================================================
+Funcion aumentar estadisticas al subir de nivel o crear personaje.
+=====================================================*/
+void Aum_Stats(Personajes& pers,int veces,int a,int b, int c){
+    //Variables auxiliares
+    int stats[11] = {1,2,3,4,5,6,7,8,a,b,c};
+    int pt;
+    int VID=0,MAN=0,FUE=0,DEF=0,MAG=0,RES=0,VEL=0,COR=0;
+    
+   veces = valorAleatorio(veces-5,veces+5);
+
+    //Repartir puntos
+    for(int i=0; i<veces;i++){
+        pt = rand() % 11;
+        switch(stats[pt]){
+            case 1:
+                pers.VID++;VID++;break;
+            case 2:
+                pers.MAN++;MAN++;break;
+            case 3:
+                pers.FUE++;FUE++;break;
+            case 4:
+                pers.DEF++;DEF++;break;
+            case 5:
+                pers.MAG++;MAG++;break;
+            case 6:
+                pers.RES++;RES++;break;
+            case 7:
+                pers.VEL++;VEL++;break;
+            case 8:
+                pers.COR++;COR++;break;
+        }
+    }
+    //Mostrar estadisticas que aumentaron:
+    cout << "\nPuntos adicionales:";
+    cout << "\nVID: +" << VID << "\nMAN: +" << MAN
+         << "\nFUE: +" << FUE << "\nDEF: +" << DEF
+         << "\nMAG: +" << MAG << "\nRES: +" << RES
+         << "\nVEL: +" << VEL << "\nCOR: +" << COR;
+    cout << "\nTotal: " << (VID+MAN+FUE+DEF+MAG+RES+VEL+COR) << endl; 
+}
 /*=====================================================
 Funcion para imprimir consecutivamente las clases ajustando los espacios en blanco para darle formato de tabla
 =====================================================*/
@@ -212,36 +317,51 @@ void Mostrar_Clases(){
     cout << "+"<< endl;
     Leer_Clases = true;
 }
-
-void Menu_CrearPersonaje(){
+/*=====================================================
+Funcion para crear personajes al iniciar una partida
+=====================================================*/
+void CrearPersonaje(int NIV){
     int per = 1;
     string nombre;
     string clase;
+    string buff;
+    int cla;
     bool class_exist = false;
     while(per<3){
         Mostrar_Clases();
         cout << "\nConfigurando personaje " << per << ":\n\nNombre: ";
         cin >> nombre;
+        getline(cin,buff);
         while(!class_exist){
             cout << "\nClase: ";
             cin >> clase;
+            getline(cin,buff);
             for(int i=0; i<clases.size(); i++){
-                if(clase == clases[i].NOM){
+                if(clase == clases [i].NOM){
                     class_exist = true;
+                    cla = i;
                     break;
                 }
             }
             if(!class_exist) cout << "\nNo existe esa clase, prueba otra vez."; 
         }
         class_exist = false;
-        per++;
-
         
+        Personajes pers(nombre,clase,NIV,0,clases[cla].VID,clases[cla].MAN,clases[cla].FUE,clases[cla].DEF,clases[cla].MAG,clases[cla].RES,clases[cla].VEL,clases[cla].COR,true,clases[cla].PRST);
+        Aum_Stats(pers,20,pers.PRST[0],pers.PRST[1],pers.PRST[2]);
+        Mostrar_Personaje(pers);
+
+        personajes.push_back(pers);
+        per++;
+        cout << "\n\n\nPulsa enter para continuar....";
+        cin.get();
         system("clear");
     }
 
 }
-
+/*=====================================================
+Funcion para leer documento de texto y mostrarlo como salida (como cat)
+=====================================================*/
 void Mostrar_Doc(string ruta){
     file.open(ruta);
     string line;
@@ -253,6 +373,7 @@ void Mostrar_Doc(string ruta){
         }
     }
 }             
+
 string Menu_Principal(){
     cout <<   "+______________________________________________________+"
          << "\n| personajes | inventario | tienda | comenzar | manual | $ " << money
@@ -266,9 +387,9 @@ string Menu_Principal(){
 
 
 int main(){
-    string ruta;
-    cin >> ruta;
-    Mostrar_Doc(ruta);
+    srand(time(nullptr)); //Inicializar semilla de numeros aleatorios
+    CrearPersonaje(1);
+
     return 0;
 }
 
